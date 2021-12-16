@@ -4,15 +4,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -70,7 +77,37 @@ fun Navigation() {
 
 @Composable
 fun EditScreen(navController: NavController) {
+    var text by rememberSaveable { mutableStateOf("Text") }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Edit Screen", color = Color.Black, fontSize = 24.sp)
+        Column {
+            TextField(value = "알람 이름", onValueChange = {
+                text = it
+            })
+        }
     }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            Text(
+                text = "확인",
+                color = Color.Black,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .size(width = 100.dp, height = 40.dp)
+                    .clickable {
+                        navController.navigate("main_screen")
+                    }, style = TextStyle(textAlign = TextAlign.Center)
+            )
+            Text(
+                text = "취소",
+                color = Color.Black,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .size(width = 100.dp, height = 40.dp)
+                    .clickable {
+                        navController.navigate("main_screen")
+                    }, style = TextStyle(textAlign = TextAlign.Center)
+            )
+        }
+    }
+
 }
