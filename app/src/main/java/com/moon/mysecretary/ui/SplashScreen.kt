@@ -37,7 +37,7 @@ fun SplashScreen(navController: NavController) {
                 })
         )
         // Customize the delay time
-        delay(800L)
+        delay(0L)
         navController.navigate("main_screen")
     }
 

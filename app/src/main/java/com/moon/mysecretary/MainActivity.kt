@@ -1,5 +1,6 @@
 package com.moon.mysecretary
 
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -23,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.moon.mysecretary.ui.EditScreen
 import com.moon.mysecretary.ui.SplashScreen
 import com.moon.mysecretary.ui.theme.MysecretaryTheme
 import com.moon.mysecretary.ui.theme.graySurface
@@ -30,6 +32,7 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.util.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,81 +77,4 @@ fun Navigation() {
             EditScreen(navController)
         }
     }
-}
-
-
-@Composable
-fun EditScreen(navController: NavController) {
-
-    var text by remember { mutableStateOf("") }
-    val dialogDateState = rememberMaterialDialogState()
-    val dialogTimeState = rememberMaterialDialogState()
-    var dateTime by remember { mutableStateOf("") }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column {
-            OutlinedTextField(value = text, onValueChange = {
-                text = it
-            }, label = { Text("알람 이름") })
-            MaterialDialog(dialogState = dialogTimeState,
-                buttons = {
-                    positiveButton("Complete", onClick = {
-                        dialogTimeState.hide()
-                    })
-                    negativeButton("Cancel", onClick = {
-                        dialogTimeState.hide()
-                    })
-                }) {
-                timepicker { time ->
-                    dateTime = "$dateTime $time"
-                    Log.i("MQ!", "time:$time")
-                }
-            }
-            MaterialDialog(
-                dialogState = dialogDateState,
-                buttons = {
-                    positiveButton(text = "Next", onClick = {
-                        dialogDateState.hide()
-                        dialogTimeState.show()
-                    })
-                    negativeButton(text = "Cancel", onClick = {
-                        dialogDateState.hide()
-                    })
-                }
-            ) {
-                datepicker { date ->
-                    dateTime = "$date"
-                    Log.i("MQ!", "date:$date")
-                }
-            }
-            Text(text = "시작날짜", modifier = Modifier.clickable {
-                dialogDateState.show()
-            })
-            Text(text = dateTime)
-        }
-    }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            Text(
-                text = "확인",
-                color = Color.Black,
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .size(width = 100.dp, height = 40.dp)
-                    .clickable {
-                        navController.navigate("main_screen")
-                    }, style = TextStyle(textAlign = TextAlign.Center)
-            )
-            Text(
-                text = "취소",
-                color = Color.Black,
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .size(width = 100.dp, height = 40.dp)
-                    .clickable {
-                        navController.navigate("main_screen")
-                    }, style = TextStyle(textAlign = TextAlign.Center)
-            )
-        }
-    }
-
 }
